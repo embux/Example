@@ -1,0 +1,4 @@
+#!/bin/bash
+export ARCH=arm
+export PATH=$PATH:/opt/toolchain/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin/
+

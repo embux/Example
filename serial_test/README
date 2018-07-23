@@ -1,0 +1,28 @@
+Device example program
+serial.c
+
+1.Compiler and build
+execute "make" will create executable file.
+
+2.Download to Device
+use ftp or USB/SD to put the executable file into Device.
+
+3.Execute example
+first change file access permissions:
+chmod +x serial.o
+and then execute:
+./serial.o
+
+4. Example Description: 
+serial port example
+functions: 
+Device set 19200bps, n81, RTS/CTS flow control. and echo back the received data.
+
+What is shown in this example:
+	1. How to open a serial port
+	2. How to set interface
+	3. How to set baudrate, flow control and other settings
+	4. How to read and write a serial port
+
+
+
