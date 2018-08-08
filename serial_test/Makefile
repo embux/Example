@@ -1,15 +1,14 @@
+PATH := $(PATH):/opt/toolchian/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin/ 
+SHELL := env PATH=$(PATH) /bin/bash
+
 CC = arm-linux-gnueabihf-gcc
 STRIP = arm-linux-gnueabihf-strip
 EXEC = serial
-OBJ = serial.o
+SRC = serial.c
 
-all:	$(EXEC)
-	$(CC) $(OBJ) -o $(EXEC)
+$(EXEC): $(SRC)
+	$(CC)  -o $(EXEC) $(SRC)
 	$(STRIP) $(EXEC)
 
-$(EXEC): $(OBJ)
-%o: %c
-	$(CC) -c $< -o $@
-
 clean:
-	rm -f $(EXEC) $(OBJ)
+	rm -f $(EXEC) *~

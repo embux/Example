@@ -34,20 +34,23 @@ int main()
     struct can_frame frame;
 
     can_socket = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-    if (can_socket < 0) {
+    if (can_socket < 0) 
+    {
         printf("socket error!!\n");
         return -1;
     }
 
     addr.can_family = AF_CAN;
     strcpy(ifr.ifr_name, CAN_INTERFACE);
-    if (ioctl(can_socket, SIOCGIFINDEX, &ifr)) {
+    if (ioctl(can_socket, SIOCGIFINDEX, &ifr)) 
+    {
         printf("ioctl error!!\n");
         return -2;
     }
     addr.can_ifindex = ifr.ifr_ifindex;
 
-    if (bind(can_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+    if (bind(can_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0) 
+    {
         printf("bind error!!\n");
         return -3;
     }
@@ -67,7 +70,8 @@ int main()
 
     ret = write(can_socket, &frame, sizeof(frame));
 
-    if(ret < 0){
+    if(ret < 0)
+    {
         printf("send error!!\n");
         return -4;
     }

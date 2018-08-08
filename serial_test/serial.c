@@ -1,7 +1,6 @@
 /*
  *  Description: 
  *      serial port example
- *      Device set 19200bps, n81, RTS/CTS flow control. and echo back the received data.
  *
  *      What is shown in this example:
  *      1. How to open a serial port
@@ -87,7 +86,7 @@ serial_type : set to RS232 , RS485 , RS422
 int embux_uart_Config (int fd, int baud , char * serial_mode , int serial_type){
     struct termios term;
     long BAUD , DATABITS , STOPBITS , PARITYON , PARITY;
-    int flag = 0 , i , j = 0 , interface;
+    int flag = 0 , i , j = 0;
     
     BAUD = baudrate(baud);
     
@@ -169,18 +168,6 @@ int embux_uart_Config (int fd, int baud , char * serial_mode , int serial_type){
     term.c_cc[VMIN]= 0;
     term.c_cc[VTIME]= 0;
     
-    switch(serial_type) {
-        case 422:
-            interface = 422;
-            break;
-        case 485:
-            interface = 485;
-            break;
-        default:
-            interface = 232;
-        break;
-    }
-    
     tcflush(fd, TCIFLUSH); // clean recv
     
     
@@ -208,13 +195,12 @@ main(argc, argv)
 
     if (argc != 2)
     {
-        printf("\ncommand : serial [device]\n");
+        printf("\ncommand : %s [device]\n",argv[0]);
         return 0;
     }
 
     strcpy(dev, argv[1]);
-
-             
+          
     /*open tty port*/
     fd = open(dev, O_RDWR | O_NOCTTY | O_NDELAY);
     if (fd == -1) {
@@ -225,91 +211,15 @@ main(argc, argv)
 
     if(embux_uart_Config(fd, 9600, "n81", 232) == -1)
         return -1;
-#if 0   
-    /*set serial interface: RS-232*/
-    interface = 232;
-    if(ioctl(fd, UC500_SET_UART_TYPE, &interface) != 0) {
-        printf("set UART type: %d...Failed, errno: %d\r\n", interface, errno);
-        close(fd);
-        return 0;
-    }
-#endif
-    /* In normal case, you must enable hardware flow if you'll monitor CTS signal */
-    /* But in hardware flow mode, RTS is controlled automatically by UART controller*/
-    //tcgetattr(fd, &T_new);
-    //T_new.c_cflag &= ~CRTSCTS;
-    //tcsetattr(fd, TCSANOW, &T_new);
-    /* Artila provides a specific command to enable CTS interrupt in normal mode */
-    //ioctl(fd, 0xf001, &mcr);
-    
-    
-    //memset(buf,'1',1024);
 
-    i = 0;
-    //mcr |= TIOCM_RTS;
-    //ioctl(fd, TIOCMSET, &mcr);
-    while(1) {
-        
-        sleep(1);
-        //write(fd,buf,1024);
-        //mcr = 0;
-        #if 1
-        ioctl(fd, TIOCMGET, &mcr);
-        if(mcr & TIOCM_CTS){
-            printf("CTS is ON\n");
-                mcr |= TIOCM_RTS;
-        }else{
-            printf("CTS is OFF\n");
-                mcr &= ~TIOCM_RTS;
-        }
-        if(mcr & TIOCM_DSR){
-            printf("DSR is ON\n");
-                mcr |= TIOCM_DTR;
-        }else{
-            printf("DSR is OFF\n");
-                mcr &= ~TIOCM_DTR;
-        }
-        if(mcr & TIOCM_CD){
-            printf("DCD is ON\n");
-        }else {
-            printf("DCD is OFF\n");
-        }
-        
-            ioctl(fd, TIOCMSET, &mcr);
-        #else
-#if 1
-        if(mcr & TIOCM_RTS) {
-            mcr &= ~TIOCM_RTS;
-            printf("RTS is OFF\n");
-        }
-        else {
-            printf("RTS is ON\n");
-            mcr |= TIOCM_RTS;
-        }
-#else
-        if(i == 0){
-            mcr &= ~TIOCM_RTS;
-            printf("RTS is OFF\n");
-            i=1;
-        }else{
-            printf("RTS is ON\n");
-            mcr |= TIOCM_RTS;
-            i=0;
-        }
-            
+    write(fd , "Hello", 5);
+
+#if 0
+    usleep(300000);
+
+    read(fd, buf. 1024);
 #endif
-            ioctl(fd, TIOCMSET, &mcr);
-        
-        //ioctl(fd, TIOCMGET, &mcr);
-        
-        //if(mcr & TIOCM_CD){
-        //  printf("DCD is ON\n");
-        //}else {
-        //  printf("DCD is OFF\n");
-        //}
-        //printf("\n");
-        #endif
-    }
+
     close(fd);
     return 0;
 }

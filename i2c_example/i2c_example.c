@@ -13,7 +13,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-static inline __s32 i2c_smbus_access(int file, char read_write, __u8 command,
+static inline __s32 i2c_smbus_access(int fd, char read_write, __u8 command,
                                      int size, union i2c_smbus_data *data)
 {
 	struct i2c_smbus_ioctl_data args;
@@ -22,14 +22,15 @@ static inline __s32 i2c_smbus_access(int file, char read_write, __u8 command,
 	args.command = command;
 	args.size = size;
 	args.data = data;
-	return ioctl(file,I2C_SMBUS,&args);
+	
+	return ioctl(fd,I2C_SMBUS,&args);
 }
 
 
-static inline __s32 i2c_smbus_read_byte_data(int file, __u8 command)
+static inline __s32 i2c_smbus_read_byte_data(int fd, __u8 command)
 {
 	union i2c_smbus_data data;
-	if (i2c_smbus_access(file,I2C_SMBUS_READ,command,
+	if (i2c_smbus_access(fd,I2C_SMBUS_READ,command,
 	                     I2C_SMBUS_BYTE_DATA,&data))
 		return -1;
 	else
@@ -40,7 +41,7 @@ int main(int argc, char **argv)
 {
 	uint8_t data, addr = 0x76, reg = 0x0d;
 	const char *path = argv[1];
-	int file, rc;
+	int fd, rc;
 
 	if (argc == 1)
 		errx(-1, "path [i2c address] [register]");
@@ -50,17 +51,23 @@ int main(int argc, char **argv)
 	if (argc > 3)
 		reg = strtoul(argv[3], NULL, 0);
 
-	file = open(path, O_RDWR);
-	if (file < 0)
+	fd = open(path, O_RDWR);
+	if (fd < 0)
+	{
 		err(errno, "Tried to open '%s'", path); 
+		return 1;
+	}
 
-	rc = ioctl(file, I2C_SLAVE, addr);
+	rc = ioctl(fd, I2C_SLAVE, addr);
 	if (rc < 0)
 		err(errno, "Tried to set device address '0x%02x'", addr);
 
-	data = i2c_smbus_read_byte_data(file, reg);
+	data = i2c_smbus_read_byte_data(fd, reg);
 
 	printf("%s: device 0x%02x at address 0x%02x: 0x%02x\n",
 			path, addr, reg, data);
 
+	close(fd);
+
+	return 0;
 }

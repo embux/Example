@@ -49,7 +49,7 @@ This example is read "AHT-503" temperature & humidity transmitter device using R
 ICM3011 provide 8M SPI norflash, the sample demonstrate how to use it.
 
 #### serial_test ####
-This demo test the serial flow control (CTS/RTS, DSR/DTR)
+This demo shows how to read/write serial prot.
 
 #### i2c_example ####
 A simple demo to read i2c device.

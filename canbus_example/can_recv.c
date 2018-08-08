@@ -34,26 +34,30 @@ int main()
     int i;
 
     can_socket = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-    if (can_socket < 0) {
+    if (can_socket < 0) 
+    {
         printf("socket error!!\n");
         return -1;
     }
 
     addr.can_family = AF_CAN;
     strcpy(ifr.ifr_name, CAN_INTERFACE);
-    if (ioctl(can_socket, SIOCGIFINDEX, &ifr)) {
+    if (ioctl(can_socket, SIOCGIFINDEX, &ifr)) 
+    {
         printf("ioctl error!!\n");
         return -2;
     }
     addr.can_ifindex = ifr.ifr_ifindex;
 
-    if (bind(can_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+    if (bind(can_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0) 
+    {
         printf("bind error!!\n");
         return -3;
     }
 
     //receive  frame
-    if(read(can_socket, &frame, sizeof(frame)) < 0){
+    if(read(can_socket, &frame, sizeof(frame)) < 0)
+    {
         printf("read error!!\n");
         return -4;
     }
@@ -65,12 +69,12 @@ int main()
 
     printf("[%d] ", frame.can_dlc);
 
-    for (i = 0; i < frame.can_dlc; i++) {
-                printf("%02x ", frame.data[i]);
+    for (i = 0; i < frame.can_dlc; i++) 
+    {
+        printf("%02x ", frame.data[i]);
     }
 
     printf("\n");
-
 
     close(can_socket);
 

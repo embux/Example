@@ -1,13 +1,16 @@
-CC=arm-linux-gnueabihf-gcc
-STRIP=arm-linux-gnueabihf-strip
-TARGET=watchdog.o
+PATH := $(PATH):/opt/toolchian/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin/ 
+SHELL := env PATH=$(PATH) /bin/bash
 
+CC = arm-linux-gnueabihf-gcc
+STRIP = arm-linux-gnueabihf-strip
+EXEC = watchdog
+SRC = watchdog.c
 
-all:watchdog
+all:	$(EXEC)
 
-watchdog:$(TARGET)
-	$(CC) -o $@ $(TARGET)
-	$(STRIP) $@
-	
+$(EXEC): $(SRC)
+	$(CC)  -o $(EXEC) $(SRC)
+	$(STRIP) $(EXEC)
+
 clean:
-	rm -rf *~ $(TARGET) a.out watchdog
+	rm -f $(EXEC)

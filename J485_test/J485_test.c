@@ -14,8 +14,6 @@
 
 #define DEVICE_NODE   "/dev/ttymxc1"
 
-
-
 /*
  * Get baudrate value
  */
@@ -160,21 +158,8 @@ int embux_uart_Config (int fd, int baud , char * serial_mode , int serial_type){
     term.c_cc[VMIN]= 0;
     term.c_cc[VTIME]= 0;
     
-    switch(serial_type) {
-        case 422:
-            interface = 422;
-            break;
-        case 485:
-            interface = 485;
-            break;
-        default:
-            interface = 232;
-        break;
-    }
-    
     tcflush(fd, TCIFLUSH); // clean recv
-    
-    
+       
     if(tcsetattr(fd,TCSANOW,&term) != 0) {
         perror("embux_uart_Config");
         close(fd);
@@ -236,17 +221,15 @@ int main(void)
 
     if(fd)
     {
-
-
         if(embux_uart_Config(fd, 9600, "n81", 485) == -1)
             return -1;
 
-
         write(fd, test_cmd, sizeof(test_cmd));
-        //usleep(100000);
-        sleep(1);
-        read_size = read(fd, buffer, sizeof(buffer));
 
+        /* Waiting for send data completed. */
+        sleep(1);
+
+        read_size = read(fd, buffer, sizeof(buffer));
 
         printf("Read %d bytes\n", read_size);
 
@@ -257,7 +240,6 @@ int main(void)
             printf("%02X ", buffer[i]);
         }
         printf("\n");
-
 
         if(read_size == 9)
         {
@@ -273,10 +255,7 @@ int main(void)
             printf("val1: %.2f (%04X), val2: %.2f (%04X)\n", (float)val1/100, val1, (float)val2/100, val2);
 
             return 0;
-
         }
-
-
     }
 
     return -1;
