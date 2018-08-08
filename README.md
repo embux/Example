@@ -26,6 +26,7 @@ You can make and download the execute file to device using ftp, scp, tftp... etc
 - i2c_example
 - can_test
 - can_example
+- modbus
 
 #### hello ####
 A simple hello world source using c language.
@@ -62,3 +63,6 @@ A simple example using c language.
 can_send: send to can0 interface.
 can_recv: recieve from can1 interface.
 You also can connect both can0, can1 pin header to test it.
+
+#### modbus ####
+Embux provides libmodbus. 2 sample demos to show modbus tcp and modbue rtu how to use.
