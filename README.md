@@ -27,6 +27,7 @@ You can make and download the execute file to device using ftp, scp, tftp... etc
 - can_test
 - can_example
 - modbus
+- spidev_test
 
 #### hello ####
 A simple hello world source using c language.
@@ -66,3 +67,6 @@ You also can connect both can0, can1 pin header to test it.
 
 #### modbus ####
 Embux provides libmodbus. 2 sample demos to show modbus tcp and modbue rtu how to use.
+
+#### spidev_test ####
+A simple demo to read SPI device.
