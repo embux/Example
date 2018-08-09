@@ -28,6 +28,7 @@ You can make and download the execute file to device using ftp, scp, tftp... etc
 - can_example
 - modbus
 - spidev_test
+- serial_modem_ctl
 
 #### hello ####
 A simple hello world source using c language.
@@ -70,3 +71,6 @@ Embux provides libmodbus. 2 sample demos to show modbus tcp and modbue rtu how t
 
 #### spidev_test ####
 A simple demo to read SPI device.
+
+#### serial_modem_ctl ####
+A simple demo to control RS232 modem pinout, such as: CTS, RTS, DSR, DTR, DCD, RI.
